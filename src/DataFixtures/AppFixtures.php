@@ -22,7 +22,7 @@ class AppFixtures extends Fixture
             
         //     $manager->persist($client);
 
-        //     for ($i=0; $i < mt_rand(2,4); $i++) { 
+        //     for ($i=0; $i < mt_rand(2,5); $i++) { 
         //         $versement = new Versement;
         //         $versement->setMontantVersement($faker->randomFloat(0, 10000,1200000))
         //                 ->setDateVersement($faker->dateTimeBetween('-6 months'))
