@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Lecteur;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -11,7 +12,16 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory:: create("fr_FR");
+        $faker = Factory::create("fr_FR");
+
+        for ($l = 1; $l <= 15; $l++) {
+            $lecteur = new Lecteur;
+            $lecteur->setNomLecteur($faker->lastName() . " " . $faker->lastName())
+                ->setPrenomLecteur($faker->firstName());
+
+            $manager->persist($lecteur);
+            $manager->flush();
+        }
 
         // for($c = 1; $c <= 20; $c++){
         //     $client = new Client;
@@ -19,7 +29,7 @@ class AppFixtures extends Fixture
         //            ->setNom($faker->lastName())
         //            ->setSolde($faker->randomFloat(0, 6000,8000000));
         //     if ($c < 10) $client->setNumCompte("C0000".$c); else $client->setNumCompte("C000".$c);   
-            
+
         //     $manager->persist($client);
 
         //     for ($i=0; $i < mt_rand(2,5); $i++) { 
@@ -40,7 +50,7 @@ class AppFixtures extends Fixture
 
         //         $manager->persist($retrait);
         //     }
-            
+
         // }
 
         // $manager->flush();
