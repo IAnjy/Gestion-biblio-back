@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Lecteur;
+use App\Entity\Livre;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -20,8 +21,20 @@ class AppFixtures extends Fixture
                 ->setPrenomLecteur($faker->firstName());
 
             $manager->persist($lecteur);
-            $manager->flush();
         }
+
+        for ($r = 1; $r <= 20; $r++) {
+            $livre = new Livre;
+            $livre->setDesign($faker->text(20))
+                ->setAuteur($faker->lastName() . " " . $faker->firstName())
+                ->setDateEdition($faker->dateTimeBetween('-35 years'))
+                ->setDisponible($faker->randomElement(['OUI','NON']));
+
+
+            $manager->persist($livre);
+        }
+
+        $manager->flush();
 
         // for($c = 1; $c <= 20; $c++){
         //     $client = new Client;
