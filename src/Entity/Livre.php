@@ -39,6 +39,11 @@ class Livre
      */
     private $disponible;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Pret::class, mappedBy="livre", cascade={"persist", "remove"})
+     */
+    private $pret;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +93,23 @@ class Livre
     public function setDisponible(string $disponible): self
     {
         $this->disponible = $disponible;
+
+        return $this;
+    }
+
+    public function getPret(): ?Pret
+    {
+        return $this->pret;
+    }
+
+    public function setPret(Pret $pret): self
+    {
+        // set the owning side of the relation if necessary
+        if ($pret->getLivre() !== $this) {
+            $pret->setLivre($this);
+        }
+
+        $this->pret = $pret;
 
         return $this;
     }
