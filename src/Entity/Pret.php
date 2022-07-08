@@ -2,13 +2,21 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\PretRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PretRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass=PretRepository::class)
+ * @ApiResource(
+ *  normalizationContext={
+ *      "groups"={"prets_read"}
+ *  },
+ *  attributes={
+ *      "order":{"id":"desc"}      
+ *  }
+ * )
  */
 class Pret
 {
@@ -16,25 +24,35 @@ class Pret
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"prets_read", "books_read", "lecteurs_read"})
      */
     private $id;
-
+    
     /**
      * @ORM\ManyToOne(targetEntity=Lecteur::class, inversedBy="prets")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"prets_read", "books_read"})
      */
     private $lecteur;
-
+    
     /**
-     * @ORM\OneToOne(targetEntity=Livre::class, inversedBy="pret", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Livre::class, inversedBy="pret")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"prets_read", "lecteurs_read"})
      */
     private $livre;
-
+    
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"prets_read"})
      */
     private $datePret;
+    
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"prets_read", "lecteurs_read", "books_read"})
+     */
+    private $rendu;
 
     public function getId(): ?int
     {
@@ -73,6 +91,18 @@ class Pret
     public function setDatePret(\DateTimeInterface $datePret): self
     {
         $this->datePret = $datePret;
+
+        return $this;
+    }
+
+    public function getRendu(): ?string
+    {
+        return $this->rendu;
+    }
+
+    public function setRendu(string $rendu): self
+    {
+        $this->rendu = $rendu;
 
         return $this;
     }

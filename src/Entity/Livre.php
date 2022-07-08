@@ -2,13 +2,21 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\LivreRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\LivreRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass=LivreRepository::class)
+ * @ApiResource(
+ *  normalizationContext={
+ *      "groups"={"books_read"}  
+ *  },
+ *  attributes={
+ *      "order":{"id":"desc"}      
+ *  }
+ * )
  */
 class Livre
 {
@@ -16,31 +24,37 @@ class Livre
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"books_read", "prets_read", "lecteurs_read"})
      */
     private $id;
-
+    
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"books_read", "prets_read", "lecteurs_read"})
      */
     private $design;
-
+    
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"books_read", "prets_read", "lecteurs_read"})
      */
     private $auteur;
-
+    
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"books_read"})
      */
     private $dateEdition;
-
+    
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"books_read"})
      */
     private $disponible;
-
+    
     /**
      * @ORM\OneToOne(targetEntity=Pret::class, mappedBy="livre", cascade={"persist", "remove"})
+     * @Groups({"books_read"})
      */
     private $pret;
 
